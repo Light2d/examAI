@@ -43,7 +43,12 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
-            file_path = os.path.join('media', uploaded_file.name)
+            media_dir = os.path.join('media')
+
+            if not os.path.exists(media_dir):
+                os.makedirs(media_dir)
+
+            file_path = os.path.join(media_dir, uploaded_file.name)
             with open(file_path, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
                     destination.write(chunk)
